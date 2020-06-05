@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./js/main.js" defer></script>
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Todo app</title>
+</head>
+<body>
+    <div id="todos">
+        <div class="heading">
+            <p class="title">Plans</p>
+            <div class="dot add" @click="showAddMenu">&oplus;</div>
+        </div>
+        <div class="create" v-if="adding">
+            <input @keyup.enter="create" type="text" placeholder="I want to..." v-model="todo_text">
+            <button @click="create">Add</button>
+        </div>
+        <div v-if="!todos.length" class="no">
+            <p>You have no todos...</p>
+        </div>
+        <div v-else class="note_wrap" v-for="todo in todos">
+            <div class="note">
+                <p>{{ todo.title }}</p>
+            </div>
+            <div class="dots">
+                <div class="dot esc" @click="del(todo.id)">&times;</div>
+                <div class="dot start" @click="start(todo.id)">&#8680;</div>
+            </div>
+        </div>
+    </div>
+    <div id="doings">
+        <div class="heading">
+            <p class="title">In progress</p> 
+        </div>
+        <div v-if="!doings.length" class="no">
+            <p>You have no doings...</p>
+        </div>
+        <div v-else class="note_wrap" v-for="doing in doings">
+            <div class="note">
+                <p>{{ doing.title }}</p>
+            </div>
+            <div class="dots">
+                <div class="dot esc" @click="del(doing.id)">&times;</div>
+                <div class="dot start" @click="finish(doing.id)">&#8680;</div>
+                <div class="dot back" @click="backToTodos(doing.id)">&#8678;</div>
+            </div>
+        </div>
+    </div>
+    <div id="dones">
+        <div class="heading">
+            <p class="title">Finished</p>
+        </div>
+        <div class="no" v-if="!dones.length">
+            <p>Nothing is done...</p>
+        </div>
+        <div v-else class="note_wrap" v-for="done in dones">
+            <div class="note">
+                <p>{{ done.title }}</p>
+            </div>
+            <div class="dots">
+                <div class="dot esc" @click="del(done.id)">&times;</div>
+                <div class="dot back" @click="backToDoings(done.id)">&#8678;</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
