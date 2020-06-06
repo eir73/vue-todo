@@ -4,14 +4,20 @@ const Todos = new Vue({
         todos: [
             {
                 title: 'Fix input closing',
+                isEditing: false,
+                isExpanded: false,
                 id: new Date()
             },
             {
                 title: 'Enable to edit todos',
+                isEditing: false,
+                isExpanded: false,
                 id: new Date()
             }, 
             {
                 title: 'css',
+                isEditing: false,
+                isExpanded: false,
                 id: new Date()
             }
         ],
@@ -19,20 +25,36 @@ const Todos = new Vue({
         adding: false
     },
     methods: {
-        create() {
+        createTodo() {
             if(!this.todo_text){
                 return
             }
             const todo = {
                 title: this.todo_text, 
+                isEditing: false,
+                isExpanded: false,
                 id: new Date()
             }
             this.todo_text = ''
             this.todos.push(todo)
             this.adding = false
         },
+        showExpandMenu(todo) {
+            todo.isExpanded = !todo.isExpanded
+        },
         del(id) {
             this.todos = this.todos.filter(todo => todo.id != id)
+        },
+        startEditing(todo) {
+            todo.isEditing = true
+            this.todo_text = todo.title
+            this.focusElement(this.$refs.inpEdit[this.todos.indexOf(todo)])
+        },
+        editTodo(todo) {
+            todo.title = this.todo_text
+            this.todo_text = ''
+            todo.isEditing = false
+            todo.isExpanded = false
         },
         start(id) {
             this.todos = this.todos.filter(todo => {
@@ -45,11 +67,11 @@ const Todos = new Vue({
         },
         showAddMenu(){
             this.adding = !this.adding
-            this.focusInput()
+            this.focusElement(this.$refs.inp)
         },
-        focusInput() {
+        focusElement(el) {
             setTimeout(() => {
-                this.$refs.inp.focus()
+                el.focus()
             },0)
         }
     }

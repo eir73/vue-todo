@@ -10,6 +10,7 @@ body {
     display: -ms-flex;
     display: -o-flex;
     display: flex;
+    background-color: #ddd;
 }
 
 .no {
@@ -40,9 +41,29 @@ body {
     cursor: pointer;
 }
 
+.expand:hover {
+    color: darkblue;
+    cursor: pointer;
+}
+
+.edit:hover {
+    color: darkslateblue;
+    cursor: pointer;
+}
+
 .back:hover {
     color: orangered;
     cursor: pointer;
+}
+
+.hidden {
+    position: absolute;
+    top: 100%;
+    background: white;
+    z-index: 100;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 1px 2px 2px 0px grey;
+    
 }
 
 .do {
@@ -62,11 +83,18 @@ body {
     display: flex;
     justify-content: space-between;
     vertical-align: middle;
-    border: 0.5px solid gray;
+    border: 0.3px solid gray;
     margin-bottom: 10px;
     padding: 10px 15px;
     border-radius: 8px;
+    background: white;
+    box-shadow: 0 0 5px grey;
 }
+
+.note input {
+    width: 300px;    
+}
+
 p {
     max-width: 350px;
     min-width: 200px;
@@ -81,6 +109,7 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
 }
 
 .done {

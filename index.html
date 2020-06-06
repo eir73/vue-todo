@@ -14,19 +14,27 @@
             <div class="dot add" @click="showAddMenu">&oplus;</div>
         </div>
         <div class="create" v-show="adding">
-            <input @keyup.enter="create" type="text" placeholder="I want to..." v-model="todo_text" ref="inp">
-            <button @click="create">Add</button>
+            <input @keyup.enter="createTodo" type="text" placeholder="I want to..." v-model="todo_text" ref="inp">
+            <button @click="createTodo">Add</button>
         </div>
         <div v-if="!todos.length" class="no">
             <p>You have no todos...</p>
         </div>
         <div v-else class="note_wrap" v-for="todo in todos">
             <div class="note">
-                <p>{{ todo.title }}</p>
+                <p v-show="!todo.isEditing">{{ todo.title }}</p>
+                <div v-show="todo.isEditing">
+                    <input type="text" @keyup.enter="editTodo(todo)" ref="inpEdit" v-model="todo_text">
+                    <button @click="editTodo(todo)">OK</button>
+                </div>
             </div>
             <div class="dots">
-                <div class="dot esc" @click="del(todo.id)">&times;</div>
-                <div class="dot start" @click="start(todo.id)">&#8680;</div>
+               <div class="dot start" @click="start(todo.id)">&#8680;</div>
+               <div class="dot expand" @click="showExpandMenu(todo)">&hellip;</div>
+               <div v-if="todo.isExpanded" class="hidden">
+                   <div class="dot edit" @click="startEditing(todo)">&#9998;</div>
+                   <div class="dot esc" @click="del(todo.id)">&#128465;</div>
+               </div>
             </div>
         </div>
     </div>
@@ -42,7 +50,7 @@
                 <p>{{ doing.title }}</p>
             </div>
             <div class="dots">
-                <div class="dot esc" @click="del(doing.id)">&times;</div>
+                <div class="dot esc" @click="del(doing.id)">&#128465;</div>
                 <div class="dot start" @click="finish(doing.id)">&#8680;</div>
                 <div class="dot back" @click="backToTodos(doing.id)">&#8678;</div>
             </div>
@@ -60,7 +68,7 @@
                 <p>{{ done.title }}</p>
             </div>
             <div class="dots">
-                <div class="dot esc" @click="del(done.id)">&times;</div>
+                <div class="dot esc" @click="del(done.id)">&#128465;</div>
                 <div class="dot back" @click="backToDoings(done.id)">&#8678;</div>
             </div>
         </div>
