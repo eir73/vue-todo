@@ -11,7 +11,7 @@ const Todos = new Vue({
                 id: new Date()
             }, 
             {
-                title: 'fix css',
+                title: 'css',
                 id: new Date()
             }
         ],
@@ -44,7 +44,13 @@ const Todos = new Vue({
             })
         },
         showAddMenu(){
-            this.adding = true
+            this.adding = !this.adding
+            this.focusInput()
+        },
+        focusInput() {
+            setTimeout(() => {
+                this.$refs.inp.focus()
+            },0)
         }
     }
 })

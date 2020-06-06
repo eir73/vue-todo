@@ -13,8 +13,8 @@
             <p class="title">Plans</p>
             <div class="dot add" @click="showAddMenu">&oplus;</div>
         </div>
-        <div class="create" v-if="adding">
-            <input @keyup.enter="create" type="text" placeholder="I want to..." v-model="todo_text">
+        <div class="create" v-show="adding">
+            <input @keyup.enter="create" type="text" placeholder="I want to..." v-model="todo_text" ref="inp">
             <button @click="create">Add</button>
         </div>
         <div v-if="!todos.length" class="no">
