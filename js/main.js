@@ -1,68 +1,74 @@
-const Todos = new Vue({
-    el: '#todos',
+const App = new Vue({
+    el: '#app',
     data: {
-        todos: [
+        columns: [
             {
-                title: 'Fix everything closing if I\'ll click somewhere or press Esc button',
-                isEditing: false,
-                isExpanded: false,
-                id: new Date()
+                heading: 'Plans',
+                noElems: 'You have no plans...',
+                position: 'first',
+                adding: false,
+                notes: [
+                    {
+                        title: 'Fix everything closing if I\'ll click somewhere or press Esc button',
+                        isEditing: false,
+                        isExpanded: false,
+                        id: new Date()
+                    },
+                    {
+                        title: 'Create project structure',
+                        isEditing: false,
+                        isExpanded: false,
+                        id: new Date()
+                    }, 
+                    {
+                        title: 'Styles',
+                        isEditing: false,
+                        isExpanded: false,
+                        id: new Date()
+                    }
+                ]
             },
             {
-                title: 'Create project structure',
-                isEditing: false,
-                isExpanded: false,
-                id: new Date()
-            }, 
+                heading: 'In progess',
+                noElems: 'Nothing is in progress',
+                position: 'center',
+                adding: false,
+                notes: []
+            },
             {
-                title: 'Styles',
-                isEditing: false,
-                isExpanded: false,
-                id: new Date()
-            }
+                heading: 'Finished',
+                noElems: 'Nothing is done for now',
+                position: 'last',
+                adding: false,
+                notes: []
+            } 
         ],
         todo_text: '',
         adding: false
     },
     methods: {
-        createTodo() {
+        createNote(column) {
             if(!this.todo_text){
                 return
             }
-            const todo = {
-                title: this.todo_text, 
-                isEditing: false,
-                isExpanded: false,
-                id: new Date()
-            }
+            const todo = createTodoBody(this.todo_text)
             this.todo_text = ''
-            this.todos.push(todo)
-            this.adding = false
+            column.notes.push(todo)
+            column.adding = false
         },
-        reset(e) {
-            if(!this.$el.contains(e.target))
-                setTimeout(() => {
-                    this.todos.forEach(todo => {
-                    todo.isEditing = false
-                    todo.isExpanded = false
-                    })
-                    this.adding = false
-                },0)
-        },
-        showExpandMenu(id) {
-            this.adding = false
-            this.todos.forEach(todo => {
-                todo.isExpanded = (todo.id != id ? false : !todo.isExpanded)
+        showExpandMenu(column, id) {
+            this.columns.forEach(col => col.adding = false)
+            column.notes.forEach(note => {
+                note.isExpanded = (note.id != id ? false : !note.isExpanded)
             })
-            //todo.isExpanded = !todo.isExpanded
         },
-        deleteTodo(id) {
-            this.todos = this.todos.filter(todo => todo.id != id)
+        deleteTodo(column, id) {
+            column.notes = deleteElementById(column.notes, id)
         },
-        startEditing(todo) {
+        startEditing(notes, todo) {
             todo.isEditing = true
             this.todo_text = todo.title
-            this.focusElement(this.$refs.inpEdit[this.todos.indexOf(todo)])
+            this.$refs.inpEdit.forEach(inp => focusElement(inp))
         },
         editTodo(todo) {
             todo.title = this.todo_text
@@ -70,79 +76,20 @@ const Todos = new Vue({
             todo.isEditing = false
             todo.isExpanded = false
         },
-        startDoing(id) {
-            this.todos = this.todos.filter(todo => {
-                if(todo.id != id) {
-                    return true
-                } else {
-                    Doings.doings.push(todo)
-                }
-            })
+        removeToRightCol(column, note) {
+            this.deleteTodo(column, note.id)
+            this.columns[this.columns.indexOf(column) + 1].notes.push(note)
         },
-        showAddMenu(){
-            this.adding = !this.adding
-            this.todos.forEach(todo => {
-                todo.isExpanded = false
+        showAddMenu(col){
+            this.columns.forEach(column => column.adding = (column == col ? !col.adding : false))
+            this.columns.forEach(col => {
+                col.notes.forEach(note => note.isExpanded = false)
             })
-            this.focusElement(this.$refs.inp)
+            this.$refs.inp.forEach(inp => focusElement(inp))
         },
-        focusElement(el) {
-            setTimeout(() => {
-                el.focus()
-            },0)
+        removeToLeftCol(column, note) {
+            this.deleteTodo(column, note.id)
+            this.columns[this.columns.indexOf(column) - 1].notes.push(note)
         }
     }
 })
-
-const Doings = new Vue({
-    el: '#doings',
-    data: {
-        doings: []
-    },
-    methods: {
-        del(id) {
-            this.doings = this.doings.filter(doing => doing.id != id)
-        },
-        finish(id) {
-            this.doings = this.doings.filter(doing => {
-                if(doing.id != id) {
-                    return true
-                } else {
-                    Dones.dones.push(doing)
-                }
-            })
-        },
-        backToTodos(id) {
-            this.doings = this.doings.filter(doing => {
-                if(doing.id != id) {
-                    return true
-                } else {
-                    Todos.todos.push(doing)
-                }
-            })
-        }
-    }
-})
-
-const Dones = new Vue({
-    el: '#dones',
-    data: {
-        dones: []
-    },
-    methods: {
-        del(id) {
-            this.dones = this.dones.filter(done => done.id != id)
-        },
-        backToDoings(id) {
-            this.dones = this.dones.filter(done => {
-                if(done.id != id) {
-                    return true
-                } else {
-                    Doings.doings.push(done)
-                }
-            })
-        }
-    }
-})
-
-document.querySelector('body').onclick = Todos.reset

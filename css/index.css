@@ -1,7 +1,15 @@
 body {
-    box-sizing: border-box;
-    margin: 0;
     padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #ddd;
+}
+.no {
+    color: dimgray;
+    font-size: 20px;
+}
+
+#app {
     font-family: 'Century Gothic', sans-serif;
     font-size: 25px;
     word-wrap: break-word;
@@ -11,19 +19,18 @@ body {
     display: -o-flex;
     display: flex;
     background-color: #ddd;
+    height: 100%;
 }
 
-.no {
-    color: dimgray;
-    font-size: 20px;
-}
-
-#todos, #doings, #dones {
+.col {
     width: 30%;
     max-width: 31%;
     min-width: 100px;
     margin: 30px;
-    padding: 10px 5px;
+    padding: 15px 10px 0px 10px;
+    background-color: white;
+    border-radius: 5px;
+    height: 0%;
 }
 
 .esc:hover {
@@ -86,12 +93,11 @@ body {
     display: flex;
     justify-content: space-between;
     vertical-align: middle;
-    border: 0.3px solid gray;
     margin-bottom: 10px;
     padding: 10px 15px;
     border-radius: 8px;
     background: white;
-    box-shadow: 0 0 5px grey;
+    box-shadow: 0 0 3px grey;
     transition: height 1s ease-in;
 }
 
