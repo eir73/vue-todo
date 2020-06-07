@@ -3,19 +3,19 @@ const Todos = new Vue({
     data: {
         todos: [
             {
-                title: 'Fix input closing',
+                title: 'Fix everything closing if I\'ll click somewhere or press Esc button',
                 isEditing: false,
                 isExpanded: false,
                 id: new Date()
             },
             {
-                title: 'Enable to edit todos',
+                title: 'Create project structure',
                 isEditing: false,
                 isExpanded: false,
                 id: new Date()
             }, 
             {
-                title: 'css',
+                title: 'Styles',
                 isEditing: false,
                 isExpanded: false,
                 id: new Date()
@@ -39,10 +39,24 @@ const Todos = new Vue({
             this.todos.push(todo)
             this.adding = false
         },
-        showExpandMenu(todo) {
-            todo.isExpanded = !todo.isExpanded
+        reset(e) {
+            if(!this.$el.contains(e.target))
+                setTimeout(() => {
+                    this.todos.forEach(todo => {
+                    todo.isEditing = false
+                    todo.isExpanded = false
+                    })
+                    this.adding = false
+                },0)
         },
-        del(id) {
+        showExpandMenu(id) {
+            this.adding = false
+            this.todos.forEach(todo => {
+                todo.isExpanded = (todo.id != id ? false : !todo.isExpanded)
+            })
+            //todo.isExpanded = !todo.isExpanded
+        },
+        deleteTodo(id) {
             this.todos = this.todos.filter(todo => todo.id != id)
         },
         startEditing(todo) {
@@ -56,7 +70,7 @@ const Todos = new Vue({
             todo.isEditing = false
             todo.isExpanded = false
         },
-        start(id) {
+        startDoing(id) {
             this.todos = this.todos.filter(todo => {
                 if(todo.id != id) {
                     return true
@@ -67,6 +81,9 @@ const Todos = new Vue({
         },
         showAddMenu(){
             this.adding = !this.adding
+            this.todos.forEach(todo => {
+                todo.isExpanded = false
+            })
             this.focusElement(this.$refs.inp)
         },
         focusElement(el) {
@@ -127,3 +144,5 @@ const Dones = new Vue({
         }
     }
 })
+
+document.querySelector('body').onclick = Todos.reset

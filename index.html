@@ -8,7 +8,7 @@
     <title>Todo app</title>
 </head>
 <body>
-    <div id="todos">
+    <div id="todos" @keyup.esc="reset">
         <div class="heading">
             <p class="title">Plans</p>
             <div class="dot add" @click="showAddMenu">&oplus;</div>
@@ -29,11 +29,11 @@
                 </div>
             </div>
             <div class="dots">
-               <div class="dot start" @click="start(todo.id)">&#8680;</div>
-               <div class="dot expand" @click="showExpandMenu(todo)">&hellip;</div>
+               <div class="dot start" @click="startDoing(todo.id)">&#8680;</div>
+               <div class="dot expand" @click="showExpandMenu(todo.id)">&hellip;</div>
                <div v-if="todo.isExpanded" class="hidden">
                    <div class="dot edit" @click="startEditing(todo)">&#9998;</div>
-                   <div class="dot esc" @click="del(todo.id)">&#128465;</div>
+                   <div class="dot esc" @click="deleteTodo(todo.id)">&#128465;</div>
                </div>
             </div>
         </div>
