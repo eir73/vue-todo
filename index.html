@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./js/helpers.js"></script>
+    <script src="./js/main.js" defer></script>
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Todo app</title>
+</head>
+<body>
+   <div id="app">
+        <div class="col"
+            @keyup.esc="reset"
+            v-for="column in columns">
+            <div class="heading">
+                <p class="title">{{ column.heading }}</p>
+                <div class="dot add">
+                    <span @click="showAddMenu(column)">&oplus;</span>
+                </div>
+            </div>
+            <div class="create" v-show="column.adding">
+                <input 
+                    type="text" 
+                    placeholder="I want to..." 
+                    @keyup.enter="createNote(column)" 
+                    v-model="todo_text" 
+                    ref="inp">
+                <input 
+                    type="date" 
+                    ref="date"
+                    v-model="deadline_date">
+                <button 
+                    @click="createNote(column)">Add</button>
+            </div>
+            <div 
+               v-if="!column.notes.length" 
+               class="no">
+                <p>{{ column.noElems }}</p>
+            </div>
+            <div 
+               v-else 
+               class="note_wrap" 
+               v-for="note in column.notes">
+                <div class="note">
+                   <div class="note_text"
+                       v-show="!note.isEditing">
+                       <p>{{ note.title }}</p>
+                       <p class="date">{{ displayDate(note) }}</p>
+                   </div>
+                    
+                    <div class="editing" v-show="note.isEditing">
+                        <input 
+                            type="text" 
+                            @keyup.enter="editTodo(note)" 
+                            ref="inpEdit" 
+                            v-model="todo_text">
+                        <button @click="editTodo(note)">OK</button>
+                    </div>
+                </div>
+                <div class="dots">
+                   <div class="dot start" 
+                       v-if="column.position != 'last'"
+                       @click="removeToRightCol(column, note)">&#8680;</div>
+                    <div class="dot back"
+                        v-if="column.position != 'first'" 
+                        @click="removeToLeftCol(column, note)">&#8678;</div>
+                   <div class="dot expand" 
+                       @click="showExpandMenu(note.id)">&hellip;</div>
+                   <div 
+                      v-if="note.isExpanded" 
+                      class="hidden">
+                       <div class="dot edit" 
+                           @click="startEditing(column.notes, note)">&#9998;</div>
+                       <div class="dot esc" 
+                           @click="deleteTodo(column, note.id)">&#128465;</div>
+                   </div>
+                </div>
+            </div>
+        </div>
+   </div>
+</body>
+</html>
