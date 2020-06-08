@@ -1,8 +1,16 @@
 body {
-    box-sizing: border-box;
-    margin: 0;
     padding: 0;
-    font-family: 'Century Gothic', sans-serif;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #222F3D;
+}
+.no {
+    color: #34495e;
+    font-size: 20px;
+}
+
+#app {
+    font-family: 'Segoe UI', sans-serif;
     font-size: 25px;
     word-wrap: break-word;
     display: -webkit-flex;
@@ -10,20 +18,34 @@ body {
     display: -ms-flex;
     display: -o-flex;
     display: flex;
-    background-color: #ddd;
+    background-color: #222F3D;
+    color: #19242e;
+    height: 100%;
 }
 
-.no {
-    color: dimgray;
-    font-size: 20px;
+button {
+    background-color: #41b883;
+    border-radius: 6px;
+    border-width: 1.5px;
+    outline: none;
+    font-family: inherit;
 }
 
-#todos, #doings, #dones {
+input {
+    height: 1.5rem;
+    font-size: 18px;
+    font-family: "Segoe UI"
+}
+
+.col {
     width: 30%;
     max-width: 31%;
     min-width: 100px;
     margin: 30px;
-    padding: 10px 5px;
+    padding: 15px 10px 0px 10px;
+    background-color: #41b883;
+    border-radius: 5px;
+    height: 0%;
 }
 
 .esc:hover {
@@ -36,22 +58,26 @@ body {
 }
 
 .start:hover {
-    color: lawngreen;
+    color: #41b883;
     cursor: pointer;
 }
 
-.add:hover {
-    color: greenyellow;
+.add span{
+    color: #19242e;
+}
+
+.add span:hover {
+    color: #45617D;
     cursor: pointer;
 }
 
 .expand:hover {
-    color: darkblue;
+    color: #41b883;
     cursor: pointer;
 }
 
 .edit:hover {
-    color: darkslateblue;
+    color: #41b883;
     cursor: pointer;
 }
 
@@ -62,11 +88,22 @@ body {
 
 .hidden {
     position: absolute;
-    top: 100%;
-    background: white;
-    z-index: 100;
+    top: calc(100% + 8px);
+    background: #efefef;
+    z-index: 1;
     border-radius: 0 0 8px 8px;
-    box-shadow: 1px 2px 2px 0px grey;   
+    box-shadow: 1px 2px 2px 0px #41b883;   
+    padding: 0 5px;
+    right: -5px;
+}
+
+.editing {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    justify-content: space-between;
 }
 
 .do {
@@ -79,6 +116,7 @@ body {
 }
 
 .note_wrap {
+    color: #34495e;
     display: -webkit-flex;
     display: -moz-flex;
     display: -ms-flex;
@@ -86,13 +124,11 @@ body {
     display: flex;
     justify-content: space-between;
     vertical-align: middle;
-    border: 0.3px solid gray;
     margin-bottom: 10px;
     padding: 10px 15px;
     border-radius: 8px;
-    background: white;
-    box-shadow: 0 0 5px grey;
-    transition: height 1s ease-in;
+    background: #efefef;/*#45617D;*/
+    box-shadow: 0 0 3px #34495e;
 }
 
 .note input {
@@ -106,6 +142,7 @@ p {
 }
 
 .dots {
+    color: #19242e;
     display: -webkit-flex;
     display: -moz-flex;
     display: -ms-flex;

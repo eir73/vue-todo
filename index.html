@@ -3,75 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./js/helpers.js"></script>
     <script src="./js/main.js" defer></script>
     <link rel="stylesheet" href="./css/index.css">
     <title>Todo app</title>
 </head>
 <body>
-    <div id="todos" @keyup.esc="reset">
-        <div class="heading">
-            <p class="title">Plans</p>
-            <div class="dot add" @click="showAddMenu">&oplus;</div>
-        </div>
-        <div class="create" v-show="adding">
-            <input @keyup.enter="createTodo" type="text" placeholder="I want to..." v-model="todo_text" ref="inp">
-            <button @click="createTodo">Add</button>
-        </div>
-        <div v-if="!todos.length" class="no">
-            <p>You have no todos...</p>
-        </div>
-        <div v-else class="note_wrap" v-for="todo in todos">
-            <div class="note">
-                <p v-show="!todo.isEditing">{{ todo.title }}</p>
-                <div v-show="todo.isEditing">
-                    <input type="text" @keyup.enter="editTodo(todo)" ref="inpEdit" v-model="todo_text">
-                    <button @click="editTodo(todo)">OK</button>
+   <div id="app">
+        <div class="col"
+            @keyup.esc="reset"
+            v-for="column in columns">
+            <div class="heading">
+                <p class="title">{{ column.heading }}</p>
+                <div class="dot add">
+                    <span @click="showAddMenu(column)">&oplus;</span>
                 </div>
             </div>
-            <div class="dots">
-               <div class="dot start" @click="startDoing(todo.id)">&#8680;</div>
-               <div class="dot expand" @click="showExpandMenu(todo.id)">&hellip;</div>
-               <div v-if="todo.isExpanded" class="hidden">
-                   <div class="dot edit" @click="startEditing(todo)">&#9998;</div>
-                   <div class="dot esc" @click="deleteTodo(todo.id)">&#128465;</div>
-               </div>
+            <div class="create" v-show="column.adding">
+                <input 
+                    type="text" 
+                    placeholder="I want to..." 
+                    @keyup.enter="createNote(column)" 
+                    v-model="todo_text" 
+                    ref="inp">
+                <button 
+                    @click="createNote(column)">Add</button>
+            </div>
+            <div 
+               v-if="!column.notes.length" 
+               class="no">
+                <p>{{ column.noElems }}</p>
+            </div>
+            <div 
+               v-else 
+               class="note_wrap" 
+               v-for="note in column.notes">
+                <div class="note">
+                    <p v-show="!note.isEditing">{{ note.title }}</p>
+                    <div class="editing" v-show="note.isEditing">
+                        <input 
+                            type="text" 
+                            @keyup.enter="editTodo(note)" 
+                            ref="inpEdit" 
+                            v-model="todo_text">
+                        <button @click="editTodo(note)">OK</button>
+                    </div>
+                </div>
+                <div class="dots">
+                   <div class="dot start" 
+                       v-if="column.position != 'last'"
+                       @click="removeToRightCol(column, note)">&#8680;</div>
+                    <div class="dot back"
+                        v-if="column.position != 'first'" 
+                        @click="removeToLeftCol(column, note)">&#8678;</div>
+                   <div class="dot expand" 
+                       @click="showExpandMenu(note.id)">&hellip;</div>
+                   <div 
+                      v-if="note.isExpanded" 
+                      class="hidden">
+                       <div class="dot edit" 
+                           @click="startEditing(column.notes, note)">&#9998;</div>
+                       <div class="dot esc" 
+                           @click="deleteTodo(column, note.id)">&#128465;</div>
+                   </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="doings">
-        <div class="heading">
-            <p class="title">In progress</p> 
-        </div>
-        <div v-if="!doings.length" class="no">
-            <p>You have no doings...</p>
-        </div>
-        <div v-else class="note_wrap" v-for="doing in doings">
-            <div class="note">
-                <p>{{ doing.title }}</p>
-            </div>
-            <div class="dots">
-                <div class="dot esc" @click="del(doing.id)">&#128465;</div>
-                <div class="dot start" @click="finish(doing.id)">&#8680;</div>
-                <div class="dot back" @click="backToTodos(doing.id)">&#8678;</div>
-            </div>
-        </div>
-    </div>
-    <div id="dones">
-        <div class="heading">
-            <p class="title">Finished</p>
-        </div>
-        <div class="no" v-if="!dones.length">
-            <p>Nothing is done...</p>
-        </div>
-        <div v-else class="note_wrap" v-for="done in dones">
-            <div class="note">
-                <p>{{ done.title }}</p>
-            </div>
-            <div class="dots">
-                <div class="dot esc" @click="del(done.id)">&#128465;</div>
-                <div class="dot back" @click="backToDoings(done.id)">&#8678;</div>
-            </div>
-        </div>
-    </div>
+   </div>
 </body>
 </html>
