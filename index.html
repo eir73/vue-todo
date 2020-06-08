@@ -26,6 +26,10 @@
                     @keyup.enter="createNote(column)" 
                     v-model="todo_text" 
                     ref="inp">
+                <input 
+                    type="date" 
+                    ref="date"
+                    v-model="deadline_date">
                 <button 
                     @click="createNote(column)">Add</button>
             </div>
@@ -39,7 +43,12 @@
                class="note_wrap" 
                v-for="note in column.notes">
                 <div class="note">
-                    <p v-show="!note.isEditing">{{ note.title }}</p>
+                   <div class="note_text"
+                       v-show="!note.isEditing">
+                       <p>{{ note.title }}</p>
+                       <p class="date">{{ displayDate(note) }}</p>
+                   </div>
+                    
                     <div class="editing" v-show="note.isEditing">
                         <input 
                             type="text" 

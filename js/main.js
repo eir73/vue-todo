@@ -9,21 +9,24 @@ const App = new Vue({
                 adding: false,
                 notes: [
                     {
-                        title: 'Fix everything closing if I\'ll click somewhere or press Esc button',
+                        title: 'implement deadline idea',
                         isEditing: false,
                         isExpanded: false,
+                        deadline: '2019-06-10',
                         id: new Date()
                     },
                     {
-                        title: 'Create project structure',
+                        title: 'CLEAN CSS CODE',
                         isEditing: false,
                         isExpanded: false,
+                        deadline: '2021-07-10',
                         id: new Date()
                     }, 
                     {
-                        title: 'Styles',
+                        title: 'Styles for new date adding and editing',
                         isEditing: false,
                         isExpanded: false,
+                        deadline: '2018-03-10',
                         id: new Date()
                     }
                 ]
@@ -44,17 +47,26 @@ const App = new Vue({
             } 
         ],
         todo_text: '',
+        deadline_date: '',
         adding: false
     },
+    mounted() {///////just for dev stage
+        this.columns.forEach(col => col.notes = filterElementsByDate(col.notes)) 
+    },
     methods: {
+        displayDate(note) {
+            return note.deadline.split('-').reverse().join('. ')
+        },
         createNote(column) {
             if(!this.todo_text){
                 return
             }
-            const todo = createTodoBody(this.todo_text)
+            const todo = createTodoBody(this.todo_text, this.deadline_date)
             this.todo_text = ''
+            this.deadline_date = ''
             column.notes.push(todo)
             column.adding = false
+            column.notes = filterElementsByDate(column.notes)
         },
         showExpandMenu(id) {
             this.columns.forEach(col => { 
