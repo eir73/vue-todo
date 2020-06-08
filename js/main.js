@@ -56,17 +56,20 @@ const App = new Vue({
             column.notes.push(todo)
             column.adding = false
         },
-        showExpandMenu(column, id) {
-            this.columns.forEach(col => col.adding = false)
-            column.notes.forEach(note => {
-                note.isExpanded = (note.id != id ? false : !note.isExpanded)
+        showExpandMenu(id) {
+            this.columns.forEach(col => { 
+                col.adding = false
+                col.notes.forEach(note => {
+                    note.isExpanded = (note.id != id ? false : !note.isExpanded)
+                    note.isEditing = false
+                })
             })
         },
         deleteTodo(column, id) {
             column.notes = deleteElementById(column.notes, id)
         },
         startEditing(notes, todo) {
-            todo.isEditing = true
+            todo.isEditing = !todo.isEditing
             this.todo_text = todo.title
             this.$refs.inpEdit.forEach(inp => focusElement(inp))
         },
@@ -79,17 +82,39 @@ const App = new Vue({
         removeToRightCol(column, note) {
             this.deleteTodo(column, note.id)
             this.columns[this.columns.indexOf(column) + 1].notes.push(note)
+            this.hideAll()
         },
         showAddMenu(col){
+            this.todo_text = ''
             this.columns.forEach(column => column.adding = (column == col ? !col.adding : false))
             this.columns.forEach(col => {
-                col.notes.forEach(note => note.isExpanded = false)
+                col.notes.forEach(note => { 
+                    note.isExpanded = false
+                    note.isEditing = false
+                })
             })
             this.$refs.inp.forEach(inp => focusElement(inp))
         },
         removeToLeftCol(column, note) {
             this.deleteTodo(column, note.id)
             this.columns[this.columns.indexOf(column) - 1].notes.push(note)
+            this.hideAll()
+        },
+        reset(e) {
+            if(e.target == this.$el) {
+                this.hideAll()
+            }
+        },
+        hideAll() {
+            this.columns.forEach(col => {
+                col.adding = false
+                col.notes.forEach(note => {
+                    note.isExpanded = false
+                    note.isEditing = false
+                })
+            })
         }
     }
 })
+
+document.querySelector('body').onclick = App.reset

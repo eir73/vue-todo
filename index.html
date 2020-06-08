@@ -15,8 +15,9 @@
             v-for="column in columns">
             <div class="heading">
                 <p class="title">{{ column.heading }}</p>
-                <div class="dot add"
-                    @click="showAddMenu(column)">&oplus;</div>
+                <div class="dot add">
+                    <span @click="showAddMenu(column)">&oplus;</span>
+                </div>
             </div>
             <div class="create" v-show="column.adding">
                 <input 
@@ -39,7 +40,7 @@
                v-for="note in column.notes">
                 <div class="note">
                     <p v-show="!note.isEditing">{{ note.title }}</p>
-                    <div v-show="note.isEditing">
+                    <div class="editing" v-show="note.isEditing">
                         <input 
                             type="text" 
                             @keyup.enter="editTodo(note)" 
@@ -56,7 +57,7 @@
                         v-if="column.position != 'first'" 
                         @click="removeToLeftCol(column, note)">&#8678;</div>
                    <div class="dot expand" 
-                       @click="showExpandMenu(column, note.id)">&hellip;</div>
+                       @click="showExpandMenu(note.id)">&hellip;</div>
                    <div 
                       v-if="note.isExpanded" 
                       class="hidden">
