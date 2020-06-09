@@ -15,9 +15,8 @@ function focusElement(el) {
         el.focus()
     },0)
 }
-function filterElementsByDate(array) {
+function sortElementsByDate(array) {
     array =  array.sort((a, b) => {
-        console.log('i am sortoig')
         return new Date(a.deadline) - new Date(b.deadline)
     })
     return array

@@ -51,7 +51,7 @@ const App = new Vue({
         adding: false
     },
     mounted() {///////just for dev stage
-        this.columns.forEach(col => col.notes = filterElementsByDate(col.notes)) 
+        this.columns.forEach(col => col.notes = sortElementsByDate(col.notes)) 
     },
     methods: {
         displayDate(note) {
@@ -66,7 +66,7 @@ const App = new Vue({
             this.deadline_date = ''
             column.notes.push(todo)
             column.adding = false
-            column.notes = filterElementsByDate(column.notes)
+            column.notes = sortElementsByDate(column.notes)
         },
         showExpandMenu(id) {
             this.columns.forEach(col => { 
@@ -94,7 +94,7 @@ const App = new Vue({
             todo.isEditing = false
             todo.isExpanded = false
             this.columns.forEach(col => {
-                col.notes = filterElementsByDate(col.notes)
+                col.notes = sortElementsByDate(col.notes)
             })
         },
         removeToRightCol(column, note) {
@@ -117,6 +117,9 @@ const App = new Vue({
             this.deleteTodo(column, note.id)
             this.columns[this.columns.indexOf(column) - 1].notes.push(note)
             this.hideAll()
+            if((this.columns.indexOf(column) - 1) == 0) {
+                this.columns[0].notes = sortElementsByDate(this.columns[0].notes)    
+            }
         },
         reset(e) {
             if(e.target == this.$el) {
