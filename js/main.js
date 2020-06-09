@@ -83,13 +83,19 @@ const App = new Vue({
         startEditing(notes, todo) {
             todo.isEditing = !todo.isEditing
             this.todo_text = todo.title
+            this.deadline_date = todo.deadline
             this.$refs.inpEdit.forEach(inp => focusElement(inp))
         },
         editTodo(todo) {
             todo.title = this.todo_text
+            todo.deadline = this.deadline_date
             this.todo_text = ''
+            this.deadline_date = ''
             todo.isEditing = false
             todo.isExpanded = false
+            this.columns.forEach(col => {
+                col.notes = filterElementsByDate(col.notes)
+            })
         },
         removeToRightCol(column, note) {
             this.deleteTodo(column, note.id)

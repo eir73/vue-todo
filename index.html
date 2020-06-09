@@ -26,12 +26,16 @@
                     @keyup.enter="createNote(column)" 
                     v-model="todo_text" 
                     ref="inp">
-                <input 
-                    type="date" 
-                    ref="date"
-                    v-model="deadline_date">
                 <button 
                     @click="createNote(column)">Add</button>
+                <div class="sb">
+                    <label for="date">deadline:</label>
+                    <input 
+                        type="date" 
+                        id="date"
+                        ref="date"
+                        v-model="deadline_date">
+                </div>
             </div>
             <div 
                v-if="!column.notes.length" 
@@ -46,15 +50,17 @@
                    <div class="note_text"
                        v-show="!note.isEditing">
                        <p>{{ note.title }}</p>
-                       <p class="date">{{ displayDate(note) }}</p>
+                       <p class="date"><span class="red">deadline</span> {{ displayDate(note) }}</p>
                    </div>
                     
                     <div class="editing" v-show="note.isEditing">
-                        <input 
-                            type="text" 
+                        <input type="text" 
                             @keyup.enter="editTodo(note)" 
                             ref="inpEdit" 
-                            v-model="todo_text">
+                            v-model="todo_text"><br>
+                        <input type="date" 
+                            @keyup.enter="editTodo(note)"
+                            v-model="deadline_date">
                         <button @click="editTodo(note)">OK</button>
                     </div>
                 </div>
